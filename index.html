@@ -1,75 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ANORA Owner OS | Premium</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ANORA | Premium Kiosk</title>
+    
+    <!-- Fonts: Inter & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- External Stylesheet -->
-    <link rel="stylesheet" href="style.css" />
-
-    <!-- Premium Fonts & Chart.js -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ivory: '#F7F3EC',
+                        espresso: '#211C19',
+                        burgundy: '#6F343B',
+                        terracotta: '#B85C42',
+                        sand: '#E5D8C8',
+                        cream: '#FFFDF9',
+                        charcoal: '#292624',
+                        gold: '#B69A62'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    boxShadow: {
+                        'premium': '0 8px 30px rgba(33, 28, 25, 0.08)',
+                        'premium-hover': '0 14px 35px rgba(33, 28, 25, 0.13)',
+                        'floating': '0 20px 40px rgba(33, 28, 25, 0.25)',
+                    }
+                }
+            }
+        }
     </script>
+
+    <!-- Custom CSS Link -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="text-charcoal h-screen w-screen flex flex-col relative overflow-hidden">
 
-    <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar">
-        <div class="brand">ANORA<span>OWNER OS</span></div>
+    <div class="top-accent"></div>
+    <div id="toast-container"></div>
 
-        <div class="nav-label">Overview</div>
-        <a href="#" class="nav-item active" onclick="navigate('dashboard', this)">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" /></svg>
-            Dashboard
-        </a>
-
-        <div class="nav-label">Operations</div>
-        <a href="#" class="nav-item" onclick="navigate('inventory', this)">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="2" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" /><line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2" /></svg>
-            Inventory
-        </a>
-
-        <div class="nav-label">People</div>
-        <a href="#" class="nav-item" onclick="navigate('staff', this)">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" /><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" /></svg>
-            Attendance & Staff
-        </a>
-
-        <div class="nav-label">System</div>
-        <a href="#" class="nav-item" onclick="navigate('settings', this)">
-            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2" /></svg>
-            Menu Settings
-        </a>
+    <!-- ==========================================
+         1. ATTRACT MODE SCREEN
+         ========================================== -->
+    <div id="screen-welcome" class="absolute inset-0 z-[60] bg-espresso flex flex-col items-center justify-center cursor-pointer screen-transition overflow-hidden" onclick="startOrderSession()">
+        
+        <!-- Premium Cafe Image Background -->
+        <div class="absolute inset-0 z-0 pointer-events-none flex items-center justify-center overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1920&q=80" alt="Anora Cafe Background" class="absolute inset-0 w-full h-full object-cover">
+        </div>
+        
+        <!-- Cinematic Gradient Overlay -->
+        <div class="absolute inset-0 attract-gradient z-10 pointer-events-none"></div>
+        
+        <!-- Branding & CTA -->
+        <div class="relative z-20 text-center flex flex-col items-center pointer-events-none">
+            <h1 class="font-serif text-ivory text-[6.5rem] tracking-[0.2em] mb-4 drop-shadow-2xl">ANORA</h1>
+            <p class="text-gold tracking-[0.35em] text-sm font-semibold uppercase mb-4 drop-shadow-md">Coffee. Food. Moments.</p>
+            <p class="font-serif text-ivory/90 text-2xl italic mb-16 drop-shadow-md">A place to slow down.</p>
+            
+            <button class="bg-espresso border border-espresso text-ivory px-14 py-5 rounded-2xl font-semibold tracking-wider text-xl btn-breathe pointer-events-auto">
+                TAKE YOUR ORDER
+            </button>
+            <p class="mt-8 text-ivory/70 text-sm tracking-widest uppercase font-medium">Touch anywhere to begin</p>
+        </div>
     </div>
 
-    <!-- ===== MAIN APP ===== -->
-    <div class="main">
-        <!-- Header -->
-        <div class="header">
-            <div class="search-bar">
-                <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" /><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" /></svg>
-                <input type="text" id="global-search" placeholder="Search orders, staff, inventory..." />
+    <!-- ==========================================
+         2. MAIN MENU SCREEN 
+         ========================================== -->
+    <div id="screen-menu" class="hidden absolute inset-0 z-10 flex flex-col bg-ivory">
+        
+        <!-- HEADER -->
+        <header class="h-[90px] bg-white border-b border-sand px-8 flex items-center justify-between shrink-0 shadow-sm z-20">
+            <div class="flex items-center gap-4">
+                <h1 class="font-serif text-3xl tracking-wider text-espresso">ANORA</h1>
+                <span class="text-xs font-semibold text-taupe tracking-[0.2em] uppercase mt-1 hidden md:block">Cafe & Kitchen</span>
             </div>
-            <div class="header-profile">
-                <div class="date-display">Tuesday, 18 August 2026</div>
-                <div class="avatar">K</div>
+            
+            <div class="flex-1 max-w-xl mx-8 relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i data-lucide="search" class="w-5 h-5 text-taupe"></i>
+                </div>
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search coffee, burgers, pasta..." 
+                    class="w-full bg-ivory border border-sand rounded-xl py-3 pl-12 pr-4 text-charcoal focus:outline-none focus:border-gold transition-colors focus:bg-white focus:shadow-premium">
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="text-right hidden lg:block">
+                    <p class="text-xs text-taupe font-semibold tracking-wider uppercase mb-1">Dine-in / Takeaway</p>
+                    <p class="text-sm font-semibold text-espresso">Select at Checkout</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden">
+            
+            <!-- CATEGORY RAIL -->
+            <aside class="w-[260px] bg-cream border-r border-sand overflow-y-auto py-6 shrink-0 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+                <p class="px-8 text-xs font-bold text-taupe tracking-[0.15em] uppercase mb-4">Menu</p>
+                <nav id="category-list" class="flex flex-col gap-1 px-3"></nav>
+            </aside>
+
+            <!-- PRODUCT AREA -->
+            <main class="flex-1 overflow-y-auto relative bg-ivory pb-32 scroll-smooth" id="main-scroll">
+                <div class="p-8 lg:p-10 max-w-screen-2xl mx-auto" id="product-container">
+                    <div id="hero-section" class="mb-12 hidden"></div>
+                    <div id="product-list" class="flex flex-col gap-12"></div>
+                </div>
+            </main>
+        </div>
+
+        <!-- FLOATING CART BAR -->
+        <div id="floating-cart" class="fixed bottom-6 left-[290px] right-10 bg-espresso rounded-2xl shadow-floating px-8 py-5 flex items-center justify-between z-30 transition-all duration-300">
+            <div class="flex items-center gap-6">
+                <div class="relative bg-charcoal p-3 rounded-full">
+                    <i data-lucide="shopping-bag" class="text-ivory w-6 h-6"></i>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 bg-burgundy text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-espresso hidden">0</span>
+                </div>
                 <div>
-                    <div style="font-size:10px; color:var(--text-muted); font-weight:700; letter-spacing:1px;">OWNER</div>
-                    <div style="font-size:13px; font-weight:600;">Krishna Bhardwaj</div>
+                    <p class="text-taupe text-xs font-semibold tracking-[0.15em] uppercase mb-1">Your Order</p>
+                    <p class="text-ivory font-medium text-lg"><span id="cart-qty" class="font-bold">0</span> Items</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <p class="text-white font-serif text-2xl tracking-wide" id="cart-total">₹0</p>
+                <button onclick="toggleCartDrawer()" class="bg-ivory text-espresso px-8 py-3 rounded-xl font-semibold tracking-wide hover:bg-gold hover:text-white transition-colors btn-press flex items-center gap-2">
+                    VIEW ORDER <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         CART DRAWER 
+         ========================================== -->
+    <div id="cart-overlay" class="fixed inset-0 overlay opacity-0 pointer-events-none z-40" onclick="toggleCartDrawer()"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-[450px] bg-white z-50 drawer drawer-closed shadow-2xl flex flex-col">
+        <div class="p-8 border-b border-sand flex justify-between items-center bg-cream">
+            <div>
+                <h2 class="font-serif text-2xl text-espresso">Your Order</h2>
+                <p class="text-sm text-taupe mt-1" id="drawer-qty">0 items</p>
+            </div>
+            <button onclick="toggleCartDrawer()" class="p-2 bg-white rounded-full shadow-sm hover:bg-sand transition-colors btn-press"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-8 flex flex-col gap-6" id="cart-items-container"></div>
+        
+        <div class="p-8 bg-cream border-t border-sand">
+            <div class="flex justify-between text-charcoal mb-3"><span class="font-medium">Subtotal</span><span id="drawer-subtotal">₹0</span></div>
+            <div class="flex justify-between text-taupe text-sm mb-6 pb-6 border-b border-sand/50"><span>GST (5%)</span><span id="drawer-gst">₹0</span></div>
+            <div class="flex justify-between items-end mb-6">
+                <span class="font-bold uppercase tracking-wide text-espresso">Total</span>
+                <span class="font-serif text-3xl text-espresso" id="drawer-total">₹0</span>
+            </div>
+            <button id="btn-checkout" onclick="proceedToOrderType()" class="w-full bg-espresso text-ivory py-4 rounded-xl font-semibold tracking-wide hover:bg-charcoal transition-colors btn-press text-lg">
+                PROCEED TO CHECKOUT
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         PRODUCT DETAIL MODAL 
+         ========================================== -->
+    <div id="product-overlay" class="fixed inset-0 overlay opacity-0 pointer-events-none z-50 flex items-center justify-center p-8">
+        <div id="product-modal" class="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl transform scale-95 transition-transform duration-300 opacity-0">
+            <div class="w-full md:w-1/2 bg-sand relative h-[300px] md:h-auto">
+                <img id="modal-img" src="" class="absolute inset-0 w-full h-full object-cover" onerror="imgFallback(this)">
+            </div>
+            <div class="w-full md:w-1/2 p-10 flex flex-col bg-cream relative">
+                <button onclick="closeModal()" class="absolute top-6 right-6 p-2 bg-white rounded-full shadow-sm hover:bg-sand transition-colors btn-press"><i data-lucide="x" class="w-5 h-5 text-espresso"></i></button>
+                <h2 id="modal-title" class="font-serif text-3xl text-espresso pr-10 mb-2">Product Name</h2>
+                <p id="modal-price" class="text-burgundy font-semibold text-xl mb-6">₹0</p>
+                <p id="modal-desc" class="text-charcoal leading-relaxed mb-8 flex-1">Description goes here...</p>
+                
+                <div class="mt-auto pt-6 border-t border-sand">
+                    <p class="text-xs font-bold tracking-widest text-taupe uppercase mb-4">Quantity</p>
+                    <div class="flex items-center gap-6 mb-8">
+                        <button onclick="updateModalQty(-1)" class="w-12 h-12 rounded-full border border-sand bg-white flex items-center justify-center hover:border-gold transition-colors btn-press text-xl text-espresso">-</button>
+                        <span id="modal-qty" class="text-2xl font-semibold w-8 text-center text-espresso">1</span>
+                        <button onclick="updateModalQty(1)" class="w-12 h-12 rounded-full border border-sand bg-white flex items-center justify-center hover:border-gold transition-colors btn-press text-xl text-espresso">+</button>
+                    </div>
+                    <button onclick="addFromModal()" class="w-full bg-espresso text-ivory py-4 rounded-xl font-semibold tracking-wide hover:bg-charcoal transition-colors btn-press flex justify-between px-8">
+                        <span>ADD TO ORDER</span>
+                        <span id="modal-total-btn">₹0</span>
+                    </button>
                 </div>
             </div>
         </div>
-
-        <!-- Dynamic Content -->
-        <div class="content" id="view-container"></div>
     </div>
 
-    <!-- Toast Container -->
-    <div id="toast-container"></div>
+    <!-- ==========================================
+         CHECKOUT FLOW SCREENS 
+         ========================================== -->
+    <template id="flow-header">
+        <div class="h-[90px] bg-white border-b border-sand px-8 flex items-center justify-between shrink-0 shadow-sm">
+            <button onclick="goBack()" class="flex items-center gap-2 text-charcoal font-medium hover:text-gold transition-colors px-4 py-2 rounded-lg btn-press">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i> BACK
+            </button>
+            <h1 class="font-serif text-2xl tracking-wider text-espresso">ANORA</h1>
+            <div class="w-24"></div> 
+        </div>
+    </template>
 
-    <!-- External JavaScript -->
+    <!-- ORDER TYPE -->
+    <div id="screen-order-type" class="hidden absolute inset-0 z-40 bg-ivory flex flex-col">
+        <div id="header-order-type"></div>
+        <div class="flex-1 flex flex-col items-center justify-center p-8">
+            <p class="text-sm font-bold text-taupe tracking-[0.2em] uppercase mb-4">Step 1 of 3</p>
+            <h2 class="font-serif text-4xl text-espresso mb-12">How would you like to order?</h2>
+            <div class="flex gap-8 max-w-4xl w-full justify-center">
+                <div onclick="selectOrderType('dine-in')" class="bg-white p-12 rounded-2xl shadow-premium hover:shadow-premium-hover hover:-translate-y-2 border-2 border-transparent hover:border-gold cursor-pointer transition-all w-80 text-center flex flex-col items-center group">
+                    <div class="w-20 h-20 bg-cream rounded-full flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors"><i data-lucide="utensils" class="w-10 h-10 text-espresso"></i></div>
+                    <h3 class="font-serif text-2xl text-espresso mb-3">DINE IN</h3>
+                    <p class="text-taupe">Enjoy your meal at ANORA.</p>
+                </div>
+                <div onclick="selectOrderType('takeaway')" class="bg-white p-12 rounded-2xl shadow-premium hover:shadow-premium-hover hover:-translate-y-2 border-2 border-transparent hover:border-gold cursor-pointer transition-all w-80 text-center flex flex-col items-center group">
+                    <div class="w-20 h-20 bg-cream rounded-full flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors"><i data-lucide="shopping-bag" class="w-10 h-10 text-espresso"></i></div>
+                    <h3 class="font-serif text-2xl text-espresso mb-3">TAKEAWAY</h3>
+                    <p class="text-taupe">We'll prepare your order to go.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLE SELECTION -->
+    <div id="screen-table" class="hidden absolute inset-0 z-40 bg-ivory flex flex-col">
+        <div id="header-table"></div>
+        <div class="flex-1 flex flex-col items-center justify-center p-8">
+            <p class="text-sm font-bold text-taupe tracking-[0.2em] uppercase mb-4">Step 2 of 3</p>
+            <h2 class="font-serif text-4xl text-espresso mb-12">Select your table</h2>
+            <div class="grid grid-cols-4 gap-4 max-w-2xl w-full" id="table-grid"></div>
+            <button id="btn-confirm-table" onclick="proceedToReview()" class="mt-12 bg-espresso text-ivory px-16 py-4 rounded-xl font-semibold tracking-wide hover:bg-charcoal transition-colors btn-press text-lg hidden fade-in">
+                CONTINUE
+            </button>
+        </div>
+    </div>
+
+    <!-- REVIEW ORDER -->
+    <div id="screen-review" class="hidden absolute inset-0 z-40 bg-ivory flex flex-col">
+        <div id="header-review"></div>
+        <div class="flex-1 flex flex-col items-center justify-center p-8 overflow-y-auto py-12">
+            <div class="bg-white p-10 rounded-2xl shadow-premium w-full max-w-2xl relative">
+                <div class="absolute top-0 left-0 w-full h-2 bg-espresso rounded-t-2xl"></div>
+                <h2 class="font-serif text-3xl text-espresso mb-8 text-center mt-2">Review Your Order</h2>
+                
+                <div class="bg-cream p-4 rounded-xl flex justify-between items-center mb-8 border border-sand">
+                    <span class="text-taupe font-bold tracking-widest text-xs uppercase">Order Type</span>
+                    <span id="review-type-label" class="font-semibold text-espresso">DINE IN • TABLE 06</span>
+                </div>
+                
+                <div id="review-items" class="flex flex-col gap-4 mb-8"></div>
+                
+                <div class="pt-6 border-t border-sand">
+                    <div class="flex justify-between text-charcoal mb-2"><span>Subtotal</span><span id="review-subtotal">₹0</span></div>
+                    <div class="flex justify-between text-taupe text-sm mb-6"><span>GST (5%)</span><span id="review-gst">₹0</span></div>
+                    <div class="flex justify-between items-end">
+                        <span class="font-bold uppercase tracking-wide text-espresso">Total</span>
+                        <span class="font-serif text-3xl text-espresso" id="review-total">₹0</span>
+                    </div>
+                </div>
+                <button onclick="switchScreen('screen-payment')" class="w-full mt-10 bg-espresso text-ivory py-4 rounded-xl font-semibold tracking-wide hover:bg-charcoal transition-colors btn-press text-lg">
+                    CONTINUE TO PAYMENT
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT SELECTION -->
+    <div id="screen-payment" class="hidden absolute inset-0 z-40 bg-ivory flex flex-col">
+        <div id="header-payment"></div>
+        <div class="flex-1 flex flex-col items-center justify-center p-8">
+            <p class="text-sm font-bold text-taupe tracking-[0.2em] uppercase mb-4">Step 3 of 3</p>
+            <h2 class="font-serif text-4xl text-espresso mb-12">Choose payment method</h2>
+            <div class="flex gap-8 max-w-4xl w-full justify-center">
+                <div onclick="showPaymentFlow('cash')" class="bg-white p-12 rounded-2xl shadow-premium hover:shadow-premium-hover hover:-translate-y-2 border-2 border-transparent hover:border-gold cursor-pointer transition-all w-80 text-center flex flex-col items-center group">
+                    <div class="w-20 h-20 bg-cream rounded-full flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors"><i data-lucide="banknote" class="w-10 h-10 text-espresso"></i></div>
+                    <h3 class="font-serif text-2xl text-espresso mb-3">CASH</h3>
+                    <p class="text-taupe">Pay at the ANORA counter.</p>
+                </div>
+                <div onclick="showPaymentFlow('upi')" class="bg-white p-12 rounded-2xl shadow-premium hover:shadow-premium-hover hover:-translate-y-2 border-2 border-transparent hover:border-gold cursor-pointer transition-all w-80 text-center flex flex-col items-center group">
+                    <div class="w-20 h-20 bg-cream rounded-full flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors"><i data-lucide="qr-code" class="w-10 h-10 text-espresso"></i></div>
+                    <h3 class="font-serif text-2xl text-espresso mb-3">UPI</h3>
+                    <p class="text-taupe">Scan the QR code and pay digitally.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT FLOWS -->
+    <div id="screen-pay-flow" class="hidden absolute inset-0 z-40 bg-ivory flex flex-col">
+        <div id="header-pay-flow"></div>
+        <div class="flex-1 flex flex-col items-center justify-center p-8">
+            <div class="bg-white p-12 rounded-2xl shadow-premium w-full max-w-md text-center border-t-4 border-burgundy">
+                
+                <!-- Cash -->
+                <div id="view-cash" class="hidden">
+                    <h3 class="font-serif text-2xl text-espresso mb-6">CASH PAYMENT</h3>
+                    <p class="text-taupe font-bold tracking-widest text-xs uppercase mb-2">Total to pay</p>
+                    <p class="font-serif text-5xl text-espresso mb-8 flow-total">₹0</p>
+                    <p class="text-charcoal mb-10 leading-relaxed">Please complete your payment<br>at the ANORA counter.</p>
+                    <button onclick="completeOrder('CASH')" class="w-full bg-espresso text-ivory py-4 rounded-xl font-semibold tracking-wide hover:bg-charcoal transition-colors btn-press">
+                        CONFIRM CASH ORDER
+                    </button>
+                </div>
+                
+                <!-- UPI -->
+                <div id="view-upi" class="hidden">
+                    <div class="inline-block bg-burgundy text-white text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">Demo Payment</div>
+                    <p class="text-taupe font-bold tracking-widest text-xs uppercase mb-2">Total</p>
+                    <p class="font-serif text-4xl text-espresso mb-8 flow-total">₹0</p>
+                    <div class="w-48 h-48 mx-auto border-4 border-espresso rounded-xl p-4 mb-4 flex items-center justify-center bg-white relative overflow-hidden">
+                        <i data-lucide="qr-code" class="w-full h-full text-espresso"></i>
+                        <div class="absolute top-0 left-0 right-0 h-1 bg-gold shadow-[0_0_10px_#B69A62] opacity-50 animate-[scan_2s_ease-in-out_infinite]"></div>
+                    </div>
+                    <p class="font-mono font-bold text-espresso mb-1 text-lg">anora.demo@upi</p>
+                    <p class="text-xs text-burgundy font-semibold mb-8">NOT A REAL TRANSACTION</p>
+                    <p class="text-sm text-taupe mb-4 flex items-center justify-center gap-2">
+                        <i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Waiting for payment...
+                    </p>
+                    <button onclick="completeOrder('UPI')" class="w-full bg-cream text-espresso py-3 rounded-xl text-sm font-semibold tracking-wide hover:bg-sand transition-colors border border-sand btn-press">
+                        SIMULATE PAYMENT SUCCESS
+                    </button>
+                </div>
+                <style>@keyframes scan { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }</style>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SUCCESS SCREEN & AUTO RESET
+         ========================================== -->
+    <div id="screen-success" class="hidden absolute inset-0 z-50 bg-espresso flex flex-col items-center justify-center">
+        <div class="text-center flex flex-col items-center bg-white p-16 rounded-3xl shadow-2xl max-w-2xl w-full mx-4 border-t-8 border-gold fade-in">
+            <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-6 pop-in" style="animation-delay: 0.1s;">
+                <i data-lucide="check-circle" class="w-12 h-12 text-green-600"></i>
+            </div>
+            <h2 class="font-serif text-4xl text-espresso mb-2 slide-up" style="animation-delay: 0.2s; opacity:0;">ORDER CONFIRMED</h2>
+            <div id="final-order-number" class="font-serif text-6xl text-gold mb-8 tracking-wider slide-up" style="animation-delay: 0.3s; opacity:0;">#ANR-1042</div>
+            <p id="success-instruction" class="text-lg text-charcoal mb-8 slide-up" style="animation-delay: 0.4s; opacity:0;">Your order is being prepared.</p>
+            <div class="bg-ivory py-4 px-8 rounded-xl inline-block mb-12 slide-up border border-sand" style="animation-delay: 0.5s; opacity:0;">
+                <p class="text-taupe text-xs font-bold tracking-[0.2em] uppercase mb-1">Estimated Time</p>
+                <p class="font-serif text-2xl text-espresso">15–20 MINUTES</p>
+            </div>
+            <div class="flex gap-4 w-full justify-center slide-up" style="animation-delay: 0.6s; opacity:0;">
+                <button onclick="showReceipt()" class="px-8 py-4 rounded-xl font-semibold tracking-wide border-2 border-espresso text-espresso hover:bg-cream transition-colors btn-press">
+                    VIEW RECEIPT
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECEIPT MODAL -->
+    <div id="receipt-overlay" class="fixed inset-0 overlay opacity-0 pointer-events-none z-[60] flex items-center justify-center p-8">
+        <div id="receipt-modal" class="bg-ivory rounded-xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300 opacity-0 overflow-hidden flex flex-col max-h-full">
+            <div id="receipt-content" class="p-8 overflow-y-auto flex-1 bg-white border border-sand m-4 rounded shadow-sm"></div>
+            <div class="p-4 bg-cream border-t border-sand flex gap-4 justify-center no-print shrink-0">
+                <button onclick="window.print()" class="px-6 py-3 bg-espresso text-ivory rounded-lg font-semibold tracking-wide btn-press text-sm"><i data-lucide="printer" class="inline w-4 h-4 mr-2"></i>PRINT</button>
+                <button onclick="resetToAttractMode()" class="px-6 py-3 bg-white border border-sand text-charcoal rounded-lg font-semibold tracking-wide btn-press text-sm">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IDLE INACTIVITY MODAL -->
+    <div id="idle-overlay" class="fixed inset-0 overlay opacity-0 pointer-events-none z-[70] flex items-center justify-center p-8">
+        <div id="idle-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-10 text-center transform scale-95 transition-transform duration-300 opacity-0">
+            <h2 class="font-serif text-3xl text-espresso mb-4">Are you still ordering?</h2>
+            <p class="text-charcoal mb-8">Your current session will be cleared shortly due to inactivity.</p>
+            <div class="flex gap-4 justify-center w-full">
+                <button onclick="resetToAttractMode()" class="flex-1 py-3 border border-sand rounded-xl text-charcoal font-semibold hover:bg-sand transition-colors">START OVER</button>
+                <button onclick="continueSession()" class="flex-1 py-3 bg-espresso text-ivory rounded-xl font-semibold hover:bg-charcoal transition-colors">CONTINUE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING START OVER -->
+    <button id="btn-start-over" onclick="confirmStartOver()" class="hidden fixed bottom-8 left-8 z-[55] bg-white border border-sand shadow-lg text-burgundy font-semibold text-sm tracking-wide px-6 py-3 rounded-full hover:bg-cream transition-colors btn-press flex items-center gap-2">
+        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> START OVER
+    </button>
+
+    <!-- Custom JS File Link -->
     <script src="script.js"></script>
 </body>
 </html>
